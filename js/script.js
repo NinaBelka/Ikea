@@ -1,19 +1,27 @@
 'use strict';
 
+// Получение объектов Dom
 const btnBurger = document.querySelector('.btn-burger'),
   catalog = document.querySelector('.catalog'),
-  overlay = document.querySelector('.overlay'),
   btnClose = document.querySelector('.btn-close'),
   subCatalog = document.querySelector('.subcatalog'),
-  subCatalogHeader = document.querySelector('.subcatalog-header');
+  subCatalogHeader = document.querySelector('.subcatalog-header'),
+  btnReturn = document.querySelector('.btn-return');
+
+const overlay = document.createElement('div');
+overlay.classList.add('overlay');
+document.body.insertAdjacentElement('beforeend', overlay);
 
 
+
+// Открытие/закрытие меню и подменю
 const openMenu = () => {
   catalog.classList.add('open');
   overlay.classList.add('active');
 };
 
 const closeMenu = () => {
+  closeSubMenu();
   catalog.classList.remove('open');
   overlay.classList.remove('active');
 };
@@ -27,7 +35,12 @@ const openSubMenu = event => {
   }
 };
 
+const closeSubMenu = () => {
+  subCatalog.classList.remove('subopen');
+};
 
+
+// Обработчики событий
 btnBurger.addEventListener('click', openMenu);
 btnClose.addEventListener('click', closeMenu);
 overlay.addEventListener('click', closeMenu);
@@ -37,3 +50,4 @@ document.addEventListener('keydown', event => {
   }
 });
 catalog.addEventListener('click', openSubMenu);
+btnReturn.addEventListener('click', closeSubMenu);
