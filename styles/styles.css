@@ -610,10 +610,10 @@ footer {
 	fill: black;
 }
 
-
 .goods-list {
 	display: -ms-grid;
 	display: grid;
+	grid-gap: 1.25rem;
 	grid-template-columns: repeat(4, 1fr);
 }
 
