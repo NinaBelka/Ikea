@@ -1,17 +1,19 @@
+import { getData } from './getData.js';
+import generateSubCatalog from './generateSubCatalog.js';
+
+
 export const menu = () => {
+
+  const updateSubCatalog = generateSubCatalog();
 
   // Получение объектов Dom
   const btnBurger = document.querySelector('.btn-burger'),
     catalog = document.querySelector('.catalog'),
-    btnClose = document.querySelector('.btn-close'),
-    subCatalog = document.querySelector('.subcatalog'),
-    subCatalogHeader = document.querySelector('.subcatalog-header'),
-    btnReturn = document.querySelector('.btn-return');
+    subCatalog = document.querySelector('.subcatalog');
 
   const overlay = document.createElement('div');
   overlay.classList.add('overlay');
-  document.body.insertAdjacentElement('beforeend', overlay);
-
+  document.body.append(overlay);
 
 
   // Открытие/закрытие меню и подменю
@@ -21,17 +23,28 @@ export const menu = () => {
   };
 
   const closeMenu = () => {
-    closeSubMenu();
     catalog.classList.remove('open');
     overlay.classList.remove('active');
+    closeSubMenu();
   };
 
-  const openSubMenu = event => {
+  const handlerCatalog = event => {
     event.preventDefault();
-    const itemList = event.target.closest('.catalog-list__item');
+
+    const target = event.target;
+    const itemList = target.closest('.catalog-list__item');
+
+    document.querySelectorAll('.catalog-list__item').forEach(item => item.classList.remove('active'));
+
     if (itemList) {
-      subCatalogHeader.innerHTML = itemList.innerHTML;
-      subCatalog.classList.add('subopen');
+      getData.subCatalog(target.textContent, (data) => {
+        updateSubCatalog(target.textContent, data); subCatalog.classList.add('subopen');
+        itemList.classList.add('active');
+      });
+    }
+
+    if (event.target.closest('.btn-close')) {
+      closeMenu();
     }
   };
 
@@ -42,13 +55,18 @@ export const menu = () => {
 
   // Обработчики событий
   btnBurger.addEventListener('click', openMenu);
-  btnClose.addEventListener('click', closeMenu);
   overlay.addEventListener('click', closeMenu);
   document.addEventListener('keydown', event => {
     if (event.code === 'Escape') {
       closeMenu();
     }
   });
-  catalog.addEventListener('click', openSubMenu);
-  btnReturn.addEventListener('click', closeSubMenu);
+  catalog.addEventListener('click', handlerCatalog);
+  subCatalog.addEventListener('click', event => {
+    const btnReturn = event.target.closest('.btn-return');
+    if (btnReturn) {
+      document.querySelectorAll('.catalog-list__item').forEach(item => item.classList.remove('active'));
+      closeSubMenu();
+    }
+  });
 };
