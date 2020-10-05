@@ -8,7 +8,7 @@ const generateCatalog = () => {
 
     data.forEach(item => {
       catalogList += `
-        <li class="footer-list">
+        <li class="catalog-list__item">
           <a href="goods.html?cat=${item}">${item}</a>
         </li>
       `;
